@@ -13,8 +13,8 @@
     "start": "electron . --ozone-platform=x11",
     "test": "node --test test/*.test.cjs",
     "test:desktop": "node scripts/cloud-smoke.cjs",
-    "pack": "electron-builder --linux dir",
-    "dist": "electron-builder --linux deb",
+    "pack": "electron-builder --linux dir --publish never",
+    "dist": "electron-builder --linux deb --publish never",
     "lint": "prettier --check .",
     "format": "prettier --write .",
     "release:check": "node scripts/release-notes.cjs --check"
