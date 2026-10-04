@@ -1,0 +1,56 @@
+const { test } = require("node:test");
+const assert = require("node:assert/strict");
+const { initial, rollover, transition, dayKey } = require("../src/state.cjs");
+const now = new Date(2026, 9, 4, 10, 0, 0);
+test("starts one task, switches tasks without losing elapsed time, then takes a break", () => {
+  let s = transition(initial(now), "add", "Write", now);
+  s = transition(s, "add", "Read", now);
+  const [a, b] = s.tasks.map((t) => t.id);
+  s = transition(s, "start", a, now);
+  s = transition(s, "start", b, new Date(+now + 60000));
+  assert.equal(s.tasks[0].elapsed, 60000);
+  assert.equal(s.tasks[0].status, "pending");
+  assert.equal(s.tasks.filter((t) => t.status === "running").length, 1);
+  s = transition(s, "finish", b, new Date(+now + 120000));
+  assert.equal(s.tasks[1].elapsed, 60000);
+  assert.equal(s.tasks[1].status, "done");
+  assert.equal(s.tasks.filter((t) => t.status === "running").length, 0);
+  assert.equal(s.breakSince, +now + 120000);
+});
+test("pause preserves elapsed time and resume continues it", () => {
+  let s = transition(initial(now), "add", "Task", now);
+  const id = s.tasks[0].id;
+  s = transition(s, "start", id, now);
+  s = transition(s, "break", null, new Date(+now + 10000));
+  s = transition(s, "start", id, new Date(+now + 30000));
+  s = transition(s, "finish", id, new Date(+now + 40000));
+  assert.equal(s.tasks[0].elapsed, 20000);
+  assert.throws(() => transition(s, "start", id, now));
+});
+test("new local day archives yesterday and prompts for a new plan", () => {
+  let s = transition(initial(now), "add", "Yesterday", now);
+  s.autostart = true;
+  s = transition(s, "start", s.tasks[0].id, now);
+  const tomorrow = new Date(2026, 9, 5, 0, 0, 1);
+  const next = rollover(s, tomorrow);
+  assert.equal(next.date, dayKey(tomorrow));
+  assert.equal(next.planned, false);
+  assert.deepEqual(next.tasks, []);
+  assert.equal(next.history[0].tasks[0].title, "Yesterday");
+  assert.equal(next.history[0].tasks[0].status, "pending");
+  assert.equal(next.history[0].tasks[0].startedAt, null);
+  assert.equal(next.history[0].tasks[0].elapsed, 14 * 60 * 60 * 1000);
+  assert.equal(s.tasks[0].status, "running");
+  assert.equal(next.autostart, true);
+  assert.equal(rollover(next, tomorrow), next);
+});
+test("validation rejects blank tasks, unsupported actions and deleting a running task", () => {
+  const s = initial(now);
+  assert.throws(() => transition(s, "add", " ", now));
+  assert.throws(() => transition(s, "add", "x".repeat(201), now));
+  assert.throws(() => transition(s, "unknown", null, now));
+  let next = transition(s, "add", "Valid", now);
+  next = transition(next, "start", next.tasks[0].id, now);
+  assert.throws(() => transition(next, "delete", next.tasks[0].id, now));
+  assert.deepEqual(s.tasks, []);
+});

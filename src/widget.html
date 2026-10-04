@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self'; script-src 'self'"
+    />
+    <title>Daily Focus · Cửa sổ nổi</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="widget-body">
+    <div class="widget">
+      <header class="drag">
+        <span id="widget-status">● ĐANG NGHỈ</span
+        ><span class="drag-hint"
+          ><img src="assets/icons/grip.svg" alt="" /></span
+        ><button id="hide" title="Ẩn · Ctrl+Shift+F" aria-label="Ẩn cửa sổ nổi">
+          <img src="assets/icons/minus.svg" alt="" />
+        </button>
+      </header>
+      <div class="widget-content">
+        <span class="widget-symbol" id="widget-symbol"
+          ><img src="assets/icons/coffee.svg" alt=""
+        /></span>
+        <div>
+          <h1 id="task-title">Break time</h1>
+          <span id="widget-description">Nghỉ một chút, rồi tiếp tục nhé.</span>
+        </div>
+        <span id="widget-clock">00:00</span>
+      </div>
+      <div class="widget-actions">
+        <button class="button secondary" id="open">Danh sách ↗</button
+        ><button class="button primary" id="widget-action">Chọn việc →</button>
+      </div>
+    </div>
+    <script src="widget.js"></script>
+  </body>
+</html>

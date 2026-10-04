@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:"
+    />
+    <title>FocusFlow</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside>
+        <a class="brand" href="#"
+          ><span class="brand-icon"
+            ><img src="assets/icons/loader-circle.svg" alt=""
+          /></span>
+          FocusFlow</a
+        >
+        <div class="workspace-label">MAIN MENU</div>
+        <button class="nav-item" id="view-daily">
+          <img src="assets/icons/layout-grid.svg" alt="" /> Daily Setup
+          <span class="nav-count" id="nav-count">0</span></button
+        ><button class="nav-item" id="view-runner">
+          <img src="assets/icons/circle-play.svg" alt="" /> Task Runner</button
+        ><button class="nav-item selected" id="view-break">
+          <img src="assets/icons/coffee.svg" alt="" /> Break Mode
+          <span class="selected-dot"></span>
+        </button>
+        <div class="workspace-label preferences-label">PREFERENCES</div>
+        <button class="nav-item" id="settings-open">
+          <img src="assets/icons/settings.svg" alt="" /> Settings
+        </button>
+        <div class="sidebar-bottom">
+          <span class="profile-avatar">U</span>
+          <div>
+            <strong>Your workspace</strong><small>Ubuntu Enthusiast</small>
+          </div>
+          <button
+            id="show-widget"
+            title="Show floating window"
+            aria-label="Show floating window"
+          >
+            <img src="assets/icons/arrow-up-right.svg" alt="" />
+          </button>
+        </div>
+      </aside>
+      <main>
+        <header class="app-header">
+          <div class="app-title">Ubuntu <span>Focus</span> Flow</div>
+          <span class="mode-pill" id="mode-pill"
+            ><img src="assets/icons/coffee.svg" alt="" /> Break Mode</span
+          >
+          <div class="header-clock">
+            <strong id="wall-clock"></strong><span id="date"></span>
+          </div>
+          <span class="header-clock-icon"
+            ><img src="assets/icons/clock.svg" alt=""
+          /></span>
+        </header>
+        <section id="break-view" class="break-view">
+          <div class="break-intro">
+            <div class="break-eyebrow">
+              <span><img src="assets/icons/coffee.svg" alt="" /></span> A GENTLE
+              PAUSE
+            </div>
+            <h1>Time for a<br /><span>break!</span></h1>
+            <p>
+              You made good progress. Step away for a moment and let your mind
+              catch up.
+            </p>
+            <button class="button primary" id="choose-task">
+              Choose next task <img src="assets/icons/arrow-right.svg" alt="" />
+            </button>
+          </div>
+          <div class="break-side">
+            <section class="break-timer-card">
+              <div class="reset-heading">
+                Your reset <img src="assets/icons/sparkles.svg" alt="" />
+              </div>
+              <div class="timer-label">BREAK TIMER</div>
+              <div id="break-clock">05:00</div>
+              <p>No rush. You have time.</p>
+              <div class="break-timer-footer">
+                <button id="pause-break">
+                  <img src="assets/icons/pause.svg" alt="" /><span
+                    >Pause timer</span
+                  ></button
+                ><span>05 minute reset</span>
+              </div>
+            </section>
+            <section class="break-tip">
+              <h2><img src="assets/icons/leaf.svg" alt="" /> TRY ONE THING</h2>
+              <p>
+                Look away from your screen, stretch your shoulders, or take a
+                sip of water.
+              </p>
+            </section>
+          </div>
+        </section>
+        <div id="daily-view" class="daily-view" hidden>
+          <div class="heading">
+            <div>
+              <span class="eyebrow">MAKE ROOM FOR WHAT MATTERS</span>
+              <h1>Today's focus.</h1>
+              <p>A small list. One task at a time.</p>
+            </div>
+            <button class="button secondary" id="plan-open">
+              Plan your day
+            </button>
+          </div>
+          <section class="focus-card">
+            <div class="focus-top">
+              <span class="status-badge" id="status-badge">● ĐANG NGHỈ</span
+              ><span class="focus-symbol"
+                ><img src="assets/icons/circle-play.svg" alt=""
+              /></span>
+            </div>
+            <div class="focus-content">
+              <div>
+                <div class="eyebrow" id="focus-label">HÍT THỞ MỘT CHÚT</div>
+                <h2 id="current-title">Break time</h2>
+                <p id="focus-description">
+                  Chọn một công việc bên dưới khi bạn sẵn sàng.
+                </p>
+              </div>
+              <div class="clock" id="clock">00:00</div>
+            </div>
+            <div class="focus-footer">
+              <span>↗ Luôn có bên bạn trên màn hình</span
+              ><button class="button primary" id="current-action">
+                Hiện cửa sổ nổi ↗
+              </button>
+            </div>
+          </section>
+          <div class="list-heading">
+            <h2>Danh sách công việc <span id="task-count">0</span></h2>
+            <span id="progress-label">Chưa có công việc</span>
+          </div>
+          <div class="progress-track"><div id="progress"></div></div>
+          <form id="add-form" class="add-form">
+            <span>＋</span
+            ><input
+              id="new-task"
+              maxlength="200"
+              placeholder="Bạn muốn làm gì hôm nay?"
+              aria-label="Tên công việc"
+              required
+            /><button class="button primary" type="submit">Thêm việc</button>
+          </form>
+          <div id="tasks" class="task-list"></div>
+          <div id="empty" class="empty">
+            <span>☀</span>
+            <h3>Một ngày mới, một khởi đầu mới</h3>
+            <p>Thêm việc đầu tiên. Bạn không cần làm tất cả cùng lúc.</p>
+          </div>
+          <footer>
+            Được lưu trên máy của bạn <span>●</span> Không cần tài khoản
+          </footer>
+        </div>
+      </main>
+    </div>
+    <div class="toast" id="toast" role="status" hidden></div>
+    <dialog id="plan-dialog">
+      <form id="plan-form">
+        <div class="dialog-symbol">☀</div>
+        <span class="eyebrow">CHÀO NGÀY MỚI</span>
+        <h2>Hôm nay bạn muốn làm gì?</h2>
+        <p>
+          Viết mỗi công việc trên một dòng. Bạn có thể thêm hoặc đổi thứ tự làm
+          sau.
+        </p>
+        <textarea
+          id="plan-text"
+          rows="6"
+          maxlength="10000"
+          placeholder="Đọc 20 trang sách&#10;Hoàn thành bản thiết kế&#10;Đi bộ 15 phút"
+          aria-label="Danh sách công việc hôm nay"
+        ></textarea>
+        <div class="dialog-actions">
+          <button class="button secondary" type="button" id="plan-skip">
+            Để lát nữa</button
+          ><button class="button primary" type="submit">
+            Sẵn sàng cho hôm nay →
+          </button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="settings-dialog">
+      <h2>Settings</h2>
+      <p>Keep your focus companion nearby.</p>
+      <label class="autostart"
+        ><input id="autostart" type="checkbox" /> Start when I log in to
+        Ubuntu</label
+      >
+      <p>Ctrl + Shift + F · Hide / show floating window</p>
+      <button class="button primary" id="settings-close">Done</button>
+    </dialog>
+    <script src="renderer.js"></script>
+  </body>
+</html>

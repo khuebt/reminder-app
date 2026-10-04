@@ -1,0 +1,64 @@
+{
+  "name": "daily-focus",
+  "version": "0.1.0",
+  "description": "Daily tasks and a floating focus companion for Ubuntu",
+  "main": "src/main.cjs",
+  "author": {
+    "name": "khuebt",
+    "url": "https://github.com/khuebt"
+  },
+  "license": "MIT",
+  "desktopName": "daily-focus.desktop",
+  "scripts": {
+    "start": "electron . --ozone-platform=x11",
+    "test": "node --test test/*.test.cjs",
+    "test:desktop": "node scripts/cloud-smoke.cjs",
+    "pack": "electron-builder --linux dir",
+    "dist": "electron-builder --linux deb",
+    "lint": "prettier --check .",
+    "format": "prettier --write .",
+    "release:check": "node scripts/release-notes.cjs --check"
+  },
+  "devDependencies": {
+    "@fontsource/ubuntu": "^5.3.0",
+    "electron": "44.5.1",
+    "electron-builder": "26.15.3",
+    "lucide-static": "^1.52.0",
+    "prettier": "3.6.2"
+  },
+  "build": {
+    "appId": "dev.dailyfocus.desktop",
+    "productName": "FocusFlow",
+    "files": [
+      "src/**/*",
+      "package.json",
+      "LICENSE"
+    ],
+    "linux": {
+      "target": "deb",
+      "category": "Office",
+      "icon": "src/icon.png",
+      "executableName": "daily-focus",
+      "syncDesktopName": true,
+      "desktop": {
+        "entry": {
+          "Comment": "Daily tasks with an always visible focus companion"
+        }
+      }
+    },
+    "deb": {
+      "maintainer": "khuebt <khuebt@users.noreply.github.com>"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/khuebt/reminder-app.git"
+  },
+  "homepage": "https://github.com/khuebt/reminder-app",
+  "bugs": {
+    "url": "https://github.com/khuebt/reminder-app/issues"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
